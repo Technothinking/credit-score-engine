@@ -23,3 +23,17 @@ def test_label_merge():
     merged = merge_with_labels(upi, labels)
     assert "default_flag" in merged.columns
     assert len(merged) == 500
+
+def test_synthetic_correlation_is_weak():
+    """
+    UPI features should be weakly (not perfectly) correlated with labels.
+    Pearson |r| should be < 0.25 for all features.
+    """
+    import numpy as np
+    upi = generate_upi_features(n=5000)
+    labels = pd.Series(np.random.binomial(1, 0.22, 5000))
+    merged = merge_with_labels(upi, labels)
+
+    for col in upi.columns:
+        r = merged[col].corr(merged['default_flag'])
+        assert abs(r) < 0.25, f"{col} is too correlated with label: r={r:.3f}"  

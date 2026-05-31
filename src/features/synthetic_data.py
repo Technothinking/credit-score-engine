@@ -45,25 +45,27 @@ def merge_with_labels(
     seed: int = 42
 ) -> pd.DataFrame:
     """
-    Attach ground-truth default labels from a real dataset to synthetic features.
-    UPI features are made weakly correlated with the label so the model learns something real.
+    Attach ground-truth default labels with WEAK correlation to synthetic features.
+    Nudge magnitude kept small to simulate realistic (noisy) alternative data signals.
     """
     rng = np.random.default_rng(seed)
     n = len(label_series)
     upi_df = upi_df.iloc[:n].copy().reset_index(drop=True)
     labels = label_series.reset_index(drop=True)
 
-    # Nudge features toward label direction so there's a learnable signal
     defaulters = labels == 1
-    upi_df.loc[defaulters, "txn_regularity_score"] *= rng.uniform(0.6, 0.9, defaulters.sum())
-    upi_df.loc[defaulters, "utility_payment_ratio"] *= rng.uniform(0.5, 0.85, defaulters.sum())
-    upi_df.loc[defaulters, "late_payment_flag"] = rng.binomial(1, 0.55, defaulters.sum())
-    upi_df.loc[defaulters, "salary_credit_regular"] = rng.binomial(1, 0.30, defaulters.sum())
-    upi_df.loc[defaulters, "balance_volatility"] *= rng.uniform(1.1, 1.5, defaulters.sum())
+    d = defaulters.sum()
+
+    # Weak nudges — realistic correlation, not near-perfect separation
+    upi_df.loc[defaulters, "txn_regularity_score"]  *= rng.uniform(0.88, 0.97, d)
+    upi_df.loc[defaulters, "utility_payment_ratio"]  *= rng.uniform(0.85, 0.95, d)
+    upi_df.loc[defaulters, "late_payment_flag"]       = rng.binomial(1, 0.28, d)
+    upi_df.loc[defaulters, "salary_credit_regular"]   = rng.binomial(1, 0.52, d)
+    upi_df.loc[defaulters, "balance_volatility"]      *= rng.uniform(1.02, 1.08, d)
+    upi_df.loc[defaulters, "recharge_consistency"]    *= rng.uniform(0.92, 0.98, d)
 
     upi_df["default_flag"] = labels
     return upi_df
-
 
 if __name__ == "__main__":
     df = generate_upi_features()
