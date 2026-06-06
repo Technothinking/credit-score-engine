@@ -26,7 +26,6 @@ PROC   = ROOT / "data" / "processed"
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Credit Score Engine",
-    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -44,7 +43,7 @@ def load_artifacts():
 model, explainer, feat_cols, X_test, y_test = load_artifacts()
 
 # ── Sidebar navigation ────────────────────────────────────────────────────────
-st.sidebar.title("📊 Credit Score Engine")
+st.sidebar.title("Credit Score Engine")
 st.sidebar.caption("Alternative data credit scoring")
 st.sidebar.divider()
 
