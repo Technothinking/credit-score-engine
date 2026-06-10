@@ -10,10 +10,8 @@ Built as a portfolio project demonstrating ML engineering for AI-driven fintech 
 
 | Component | Link |
 |---|---|
-| Streamlit dashboard | [credit-score-engine.hf.space](#) |
-| FastAPI docs | [API on Render](#) |
+| Streamlit dashboard | [credit-score-engine.hf.space](https://huggingface.co/spaces/Tasty-kadai-paneer/credit-score-engine) |
 
-*(links updated after deployment)*
 
 ---
 
